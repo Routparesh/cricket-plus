@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## .env.local
+
+```bash
+CRICKET_API_KEY="your api key"
+ODDS_API_KEY="your api key"
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+```
+
 ## Getting Started
 
 First, run the development server:
