@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    depends_on:
+      - redis
+    restart: always
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  live_worker:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    command: python workers/live_worker.py
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - CRICKET_API_KEY=${CRICKET_API_KEY}
+      - ODDS_API_KEY=${ODDS_API_KEY}
+      - POLL_INTERVAL_SECONDS=30
+    depends_on:
+      - redis
+    restart: always
+
+volumes:
+  redis_data:
